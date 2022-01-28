@@ -25,6 +25,8 @@ jobs:
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
       - run: cd ./udagram-api && yarn && yarn build
+      - run: eb init udagram-api --platform node.js --region us-east-1
+      - run: eb create --sample udagram-api
       - run: eb use udagram-api
       - run: eb deploy udagram-api
 
