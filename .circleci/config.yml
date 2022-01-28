@@ -7,8 +7,7 @@ jobs:
     working_directory: ./udagram-frontend
     executor: node/default
     steps:
-      - checkout:
-          path: ./
+      - checkout
       - node/install-packages:
           app-dir: ./udagram-frontend
       - run:
@@ -22,20 +21,19 @@ jobs:
     working_directory: ./udagram-api
     executor: node/default
     steps:
-      - checkout:
-          path: ./
+      - checkout
       - node/install-packages:
           app-dir: ./udagram-api
       - run:
           name: Build and Archive Server
-          command: |-
+          command: |
             yarn build
             printenv > www/.env
             yarn archive
       - aws-cli/install
       - run:
           name: Deploy Server
-          command: |-
+          command: |
             aws s3 cp ./www/Archive.zip ${S3_BUCKET}
             aws elasticbeanstalk create-application-version --application-name ${EB_APP} --version-label <<pipeline.git.revision>>
             aws elasticbeanstalk update-environment --application-name ${EB_APP} --environment-name ${EB_ENV} --version-label <<pipeline.git.revision>>
