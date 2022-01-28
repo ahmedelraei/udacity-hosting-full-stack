@@ -7,7 +7,8 @@ jobs:
     working_directory: ./udagram-frontend
     executor: node/default
     steps:
-      - checkout
+      - checkout:
+        path: ./
       - node/install-packages:
           app-dir: ./udagram-frontend
       - run:
@@ -21,7 +22,8 @@ jobs:
     working_directory: ./udagram-api
     executor: node/default
     steps:
-      - checkout
+      - checkout:
+        path: ./
       - node/install-packages:
           app-dir: ./udagram-api
       - run:
