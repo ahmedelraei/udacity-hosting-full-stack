@@ -13,8 +13,24 @@ jobs:
       - run: cd ./udagram-frontend && yarn && yarn build
       - run: aws s3 sync ./udagram-frontend/www s3://${S3_BUCKET}
 
+  server:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Intalling AWS CLI
+          command: |
+            sudo apt-get update
+            sudo apt install python3-pip
+            sudo pip3 install awsebcli --upgrade
+      - run: cd ./udagram-api && yarn && yarn build
+      - run: eb use udagram-api
+      - run: eb deploy udagram-api
+
 workflows:
   version: 2
   execute_bulk:
     jobs:
       - frontend
+      - server
