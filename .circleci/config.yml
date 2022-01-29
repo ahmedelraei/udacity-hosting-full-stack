@@ -1,37 +1,31 @@
+version: "2.1"
+orbs:
+  node: circleci/node@4.1.0
+  aws-cli: circleci/aws-cli@1.3.1
+  eb: circleci/aws-elastic-beanstalk@1.0.2
 jobs:
-  frontend:
-    machine:
-      image: ubuntu-2004:202010-01
+  build_deploy:
+    docker:
+      - image: "cimg/base:stable"
     steps:
+      - node/install
       - checkout
+      - aws-cli/setup
+      - eb/setup
       - run:
-          name: Intalling AWS CLI
-          command: |
-            sudo apt-get update
-            sudo apt install python3-pip
-            sudo pip3 install awsebcli --upgrade
-      - run: cd ./udagram-frontend && yarn && yarn build
-      - run: aws s3 sync ./udagram-frontend/www s3://${S3_BUCKET}
-
-  server:
-    machine:
-      image: ubuntu-2004:202010-01
-    steps:
-      - checkout
+          name: Installing front-end dependencies
+          command: cd ./udagram-frontend && yarn && yarn build
       - run:
-          name: Intalling AWS CLI
-          command: |
-            sudo apt-get update
-            sudo apt install python3-pip
-            sudo pip3 install awsebcli --upgrade
-      - run: cp ~/.aws/config ~/.aws/config
-      - run: cd ./udagram-api && yarn && yarn build && printenv > www/.env && yarn archive
-      - run: sudo eb use ${EB_APP}
-      - run: sudo eb deploy ${EB_ENV}
+          name: Deploying front-end
+          command: aws s3 sync ./udagram-frontend/www s3://${S3_BUCKET}
+      - run:
+          name: Installing back-end dependencies
+          command: cd ./udagram-api && yarn && yarn build && yarn archive
+      - run:
+          name: Deploying back-end
+          command: eb use ${EB_ENV} && eb deploy
 
 workflows:
-  version: 2
   execute_bulk:
     jobs:
-      - frontend
-      - server
+      - build_deploy
