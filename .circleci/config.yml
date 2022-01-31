@@ -8,10 +8,6 @@ jobs:
     docker:
       - image: "cimg/base:stable"
     working_directory: .
-    filters:
-      branches:
-        only:
-          - main
     steps:
       - node/install:
           install-yarn: true
@@ -41,4 +37,7 @@ jobs:
 workflows:
   execute_bulk:
     jobs:
-      - build_deploy
+      - build_deploy:
+          filters:
+            branches:
+              only: main
