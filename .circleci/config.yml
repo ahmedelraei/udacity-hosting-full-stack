@@ -16,16 +16,22 @@ jobs:
       - eb/setup
       - run:
           name: Installing front-end dependencies
-          command: cd ./udagram-frontend && yarn && yarn build
+          command: yarn frontend:install
+      - run:
+          name: Building front-end
+          command: yarn frontend:build
       - run:
           name: Deploying front-end
-          command: aws s3 sync ./udagram-frontend/www s3://${S3_BUCKET}
+          command: yarn frontend:deploy
       - run:
           name: Installing back-end dependencies
-          command: cd ./udagram-api && yarn && yarn build && yarn archive
+          command: yarn backend:install
+      - run:
+          name: Building back-end
+          command: yarn backend:build
       - run:
           name: Deploying back-end
-          command: eb init ${EB_ENV} --platform node.js --region us-east-1 && eb use ${EB_ENV} && eb deploy
+          command: yarn backend:build
 
 workflows:
   execute_bulk:

@@ -5,11 +5,13 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
+    "install": "yarn",
     "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "aws s3 sync ./udagram-frontend/www s3://${S3_BUCKET}"
   },
   "private": true,
   "dependencies": {
