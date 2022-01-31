@@ -7,7 +7,7 @@ jobs:
   build_deploy:
     docker:
       - image: "cimg/base:stable"
-    working_directory: .
+    working_directory: ~/app
     steps:
       - node/install:
           install-yarn: true
