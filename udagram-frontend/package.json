@@ -5,7 +5,6 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "install": "yarn",
     "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",

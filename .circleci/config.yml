@@ -31,7 +31,7 @@ jobs:
           command: yarn backend:build
       - run:
           name: Deploying back-end
-          command: yarn backend:build
+          command: yarn backend:deploy
 
 workflows:
   execute_bulk:
